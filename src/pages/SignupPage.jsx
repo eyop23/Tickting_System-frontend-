@@ -1,110 +1,118 @@
 // src/pages/SignupPage.jsx
 
-import React, { Component } from "react";
-import axios from "axios"; // Import axios to handle API requests
-import BASE_URL from "../config"; // Import the BASE_URL from config
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import BASE_URL from "../config";
+import { Link } from "react-router-dom";
 
-class SignupPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: "",
-      email: "",
-      password: "",
-      error: null,
-      successMessage: null,
-    };
-  }
+const SignupPage = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
-  handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+  const navigate = useNavigate(); // Initialize navigate function
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const { name, email, password } = this.state;
-
     try {
-      // Send a POST request to the backend for registration
-      const response = await axios.post(`${BASE_URL}/users/signup`, {
-        name,
-        email,
-        password,
-      });
-      // On success, display a success message
-      this.setState({ successMessage: "Registration successful!" });
+      await axios.post(`${BASE_URL}/users/signup`, formData);
+      setSuccessMessage("Registration successful! Redirecting to login...");
+
+      // Redirect to login page after 2 seconds
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } catch (error) {
-      // On error, display the error message
-      this.setState({ error: "Something went wrong. Please try again." });
+      // If the error response has a message, set it as the error
+      if (error.response && error.response.data && error.response.data.message) {
+        setError(error.response.data.message);
+      } else {
+        setError("Registration failed. Please try again.");
+      }
     }
   };
 
-  render() {
-    const { name, email, password, error, successMessage } = this.state;
-    return (
-      <div className="max-w-sm mx-auto mt-10">
-        <h2 className="text-2xl font-bold text-center mb-4">Signup</h2>
+  return (
+    <div className="max-w-sm mx-auto mt-10">
+      <h2 className="text-2xl font-bold text-center mb-4">Signup</h2>
 
-        {/* Display success or error message */}
-        {successMessage && (
-          <div className="text-green-500 mb-4">{successMessage}</div>
-        )}
-        {error && <div className="text-red-500 mb-4">{error}</div>}
+      {successMessage && (
+        <div className="text-green-500 mb-4">{successMessage}</div>
+      )}
+      {error && <div className="text-red-500 mb-4">{error}</div>}
 
-        <form onSubmit={this.handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="name" className="block">
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={name}
-              onChange={this.handleChange}
-              className="w-full px-4 py-2 border rounded-md"
-            />
-          </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="name" className="block">
+            Name
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-md"
+            required
+          />
+        </div>
 
-          <div>
-            <label htmlFor="email" className="block">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={this.handleChange}
-              className="w-full px-4 py-2 border rounded-md"
-            />
-          </div>
+        <div>
+          <label htmlFor="email" className="block">
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-md"
+            required
+          />
+        </div>
 
-          <div>
-            <label htmlFor="password" className="block">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={password}
-              onChange={this.handleChange}
-              className="w-full px-4 py-2 border rounded-md"
-            />
-          </div>
+        <div>
+          <label htmlFor="password" className="block">
+            Password
+          </label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-md"
+            required
+          />
+        </div>
 
-          <button
-            type="submit"
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded-md"
-          >
-            Register
-          </button>
-        </form>
+        <button
+          type="submit"
+          className="w-full px-4 py-2 bg-blue-600 text-white rounded-md"
+        >
+          Signup
+        </button>
+      </form>
+
+      {/* Link to Login Page */}
+      <div className="mt-4 text-center">
+        <span>Already have an account? </span>
+        <Link to="/login" className="text-blue-600 hover:underline">
+          Login
+        </Link>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default SignupPage;

@@ -1,25 +1,22 @@
-// src/App.jsx
 import React from "react";
-import { Provider } from "react-redux";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import store from "./redux/store"; // Adjust path to your store
-
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import AdminDashboard from "./pages/AdminDashboard";
+import UserDashboard from "./pages/UserDashboard";
 
-class App extends React.Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <Router>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-          </Routes>
-        </Router>
-      </Provider>
-    );
-  }
-}
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/admin/*" element={<AdminDashboard />} />
+        <Route path="/user/*" element={<UserDashboard />} />
+      </Routes>
+    </Router>
+  );
+};
 
 export default App;

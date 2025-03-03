@@ -1,8 +1,9 @@
 // src/pages/LoginPage.jsx
-
 import React, { Component } from "react";
-import axios from "axios"; // Import axios to handle API requests
-import BASE_URL from "../config"; // Import the BASE_URL from config
+import axios from "axios";
+import { Navigate } from "react-router-dom"; // Import Navigate for redirection
+import BASE_URL from "../config";
+import { Link } from "react-router-dom";
 
 class LoginPage extends Component {
   constructor(props) {
@@ -12,6 +13,7 @@ class LoginPage extends Component {
       password: "",
       error: null,
       successMessage: null,
+      redirectTo: null, // Store redirection path after login
     };
   }
 
@@ -25,32 +27,38 @@ class LoginPage extends Component {
     const { email, password } = this.state;
 
     try {
-      // Send a POST request to the backend for login
       const response = await axios.post(`${BASE_URL}/users/login`, {
         email,
         password,
       });
-
-      // Save JWT token to local storage or manage in redux state
       console.log(response.data);
-      localStorage.setItem("token", response.data.token); // Save token to local storage
+      const { token, user } = response.data;
+      localStorage.setItem("token", token);
       this.setState({ successMessage: "Login successful!" });
-      // Redirect to dashboard or home page
-      //   this.props.history.push("/dashboard"); // Change to your dashboard route
+
+      // Redirect based on role
+      if (user.role === "admin") {
+        this.setState({ redirectTo: "/admin/profile" });
+      } else {
+        this.setState({ redirectTo: "/user/profile" }); // Not implemented yet
+      }
     } catch (error) {
-      // On error, display the error message
       this.setState({ error: "Invalid credentials. Please try again." });
     }
   };
 
   render() {
-    const { email, password, error, successMessage } = this.state;
+    const { email, password, error, successMessage, redirectTo } = this.state;
+
+    // Redirect if `redirectTo` is set
+    if (redirectTo) {
+      return <Navigate to={redirectTo} />;
+    }
 
     return (
       <div className="max-w-sm mx-auto mt-10">
         <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
 
-        {/* Display success or error message */}
         {successMessage && (
           <div className="text-green-500 mb-4">{successMessage}</div>
         )}
@@ -92,6 +100,13 @@ class LoginPage extends Component {
             Login
           </button>
         </form>
+
+        <div className="mt-4 text-center">
+          <span>Don't have an account? </span>
+          <Link to="/signup" className="text-blue-600 hover:underline">
+            Signup
+          </Link>
+        </div>
       </div>
     );
   }
