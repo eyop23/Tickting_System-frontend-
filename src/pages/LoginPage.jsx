@@ -21,7 +21,6 @@ const LoginPage = () => {
     try {
       const response = await axios.post(`${BASE_URL}/users/login`, formData);
       const { token, user } = response.data;
-
       // Dispatch to Redux store
       dispatch(loginSuccess({ token, user }));
 

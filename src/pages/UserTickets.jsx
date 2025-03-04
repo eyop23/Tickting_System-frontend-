@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { format } from "date-fns"; // Import date-fns
 import BASE_URL from "../config";
 
 const Tickets = () => {
@@ -34,6 +35,8 @@ const Tickets = () => {
             <th className="border p-2">Title</th>
             <th className="border p-2">Status</th>
             <th className="border p-2">Description</th>
+            <th className="border p-2">Created At</th>{" "}
+            {/* New column for createdAt */}
           </tr>
         </thead>
         <tbody>
@@ -44,6 +47,12 @@ const Tickets = () => {
               <td className="border p-2">{ticket.title}</td>
               <td className="border p-2">{ticket.status}</td>
               <td className="border p-2">{ticket.description}</td>
+              {/* Format the createdAt date */}
+              <td className="border p-2">
+                {ticket.createdAt
+                  ? format(new Date(ticket.createdAt), "MMMM dd, yyyy HH:mm:ss")
+                  : "N/A"}
+              </td>
             </tr>
           ))}
         </tbody>

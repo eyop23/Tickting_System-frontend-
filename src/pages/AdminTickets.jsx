@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { format } from "date-fns"; // Import date-fns
 import BASE_URL from "../config";
 
 const AdminTickets = () => {
@@ -32,19 +33,6 @@ const AdminTickets = () => {
     Open: "bg-blue-500", // Open status color
     "In Progress": "bg-yellow-500", // In Progress status color
     Closed: "bg-green-500", // Closed status color
-  };
-
-  const getNextStatus = (currentStatus) => {
-    switch (currentStatus) {
-      case "Open":
-        return "In Progress";
-      case "In Progress":
-        return "Closed";
-      case "Closed":
-        return "Open";
-      default:
-        return "Open";
-    }
   };
 
   const updateTicketStatus = async (ticketId, newStatus) => {
@@ -89,6 +77,8 @@ const AdminTickets = () => {
             <th className="border p-2">Title</th>
             <th className="border p-2">Description</th>
             <th className="border p-2">Status</th>
+            <th className="border p-2">Created At</th>{" "}
+            {/* New column for createdAt */}
             <th className="border p-2">Actions</th>
           </tr>
         </thead>
@@ -108,6 +98,12 @@ const AdminTickets = () => {
                 >
                   {ticket.status}
                 </span>
+              </td>
+              {/* Format the createdAt date */}
+              <td className="border p-2">
+                {ticket.createdAt
+                  ? format(new Date(ticket.createdAt), "MMMM dd, yyyy HH:mm:ss")
+                  : "N/A"}
               </td>
               <td className="border p-2">
                 {editingTicketId === ticket._id ? (
