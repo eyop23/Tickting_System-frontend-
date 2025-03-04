@@ -4,6 +4,7 @@ import { FiMenu } from "react-icons/fi";
 import AdminSidebar from "../components/AdminSidebar";
 import AdminProfile from "./AdminProfile";
 import AdminTickets from "./AdminTickets";
+import Customers from "./Customer";
 
 const AdminDashboard = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
@@ -54,6 +55,7 @@ const AdminDashboard = () => {
         <Routes>
           <Route path="/profile" element={<AdminProfile />} />
           <Route path="/tickets" element={<AdminTickets />} />
+          <Route path="/get_users" element={<Customers />} />
         </Routes>
       </div>
     </div>

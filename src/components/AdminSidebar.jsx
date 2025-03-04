@@ -44,6 +44,16 @@ const AdminSidebar = ({ isOpen, toggleSidebar }) => {
         >
           Tickets
         </Link>
+        <Link
+          to="/admin/get_users"
+          className={`p-2 rounded-md ${
+            location.pathname === "/admin/get_users"
+              ? "bg-blue-500"
+              : "hover:bg-gray-700"
+          }`}
+        >
+         Customers
+        </Link>
       </nav>
     </div>
   );
