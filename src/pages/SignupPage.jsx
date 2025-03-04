@@ -1,8 +1,6 @@
-// src/pages/SignupPage.jsx
-
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import BASE_URL from "../config";
 import { Link } from "react-router-dom";
 
@@ -11,11 +9,11 @@ const SignupPage = () => {
     name: "",
     email: "",
     password: "",
+    role: "user",
   });
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-
-  const navigate = useNavigate(); // Initialize navigate function
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -26,18 +24,9 @@ const SignupPage = () => {
     try {
       await axios.post(`${BASE_URL}/users/signup`, formData);
       setSuccessMessage("Registration successful! Redirecting to login...");
-
-      // Redirect to login page after 2 seconds
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
+      setTimeout(() => navigate("/login"), 2000);
     } catch (error) {
-      // If the error response has a message, set it as the error
-      if (error.response && error.response.data && error.response.data.message) {
-        setError(error.response.data.message);
-      } else {
-        setError("Registration failed. Please try again.");
-      }
+      setError("Registration failed. Please try again.");
     }
   };
 
@@ -96,6 +85,22 @@ const SignupPage = () => {
           />
         </div>
 
+        <div>
+          <label htmlFor="role" className="block">
+            Role
+          </label>
+          <select
+            id="role"
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-md"
+          >
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+
         <button
           type="submit"
           className="w-full px-4 py-2 bg-blue-600 text-white rounded-md"
@@ -104,7 +109,6 @@ const SignupPage = () => {
         </button>
       </form>
 
-      {/* Link to Login Page */}
       <div className="mt-4 text-center">
         <span>Already have an account? </span>
         <Link to="/login" className="text-blue-600 hover:underline">

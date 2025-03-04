@@ -59,11 +59,11 @@ const AdminProfile = () => {
         <label className="text-lg font-semibold">Role:</label>
         <p className="text-gray-700 capitalize">{user.role}</p>
       </div>
-      <div className="mt-6">
+      {/* <div className="mt-6">
         <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
           Edit Profile
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };
