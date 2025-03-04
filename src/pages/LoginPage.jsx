@@ -21,7 +21,7 @@ const LoginPage = () => {
     try {
       const response = await axios.post(`${BASE_URL}/users/login`, formData);
       const { token, user } = response.data;
-      
+
       // Dispatch to Redux store
       dispatch(loginSuccess({ token, user }));
 
@@ -34,13 +34,23 @@ const LoginPage = () => {
 
   return (
     <div className="max-w-sm mx-auto mt-10">
+      <div className="mb-8 text-center">
+        <h1 className="text-xl font-bold mb-2">Ticketing System</h1>
+        <p className="text-gray-600">
+          Welcome to our ticketing system. Please login to manage your tickets,
+          view your status, or perform admin tasks such as managing user
+          requests.
+        </p>
+      </div>
       <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
 
       {error && <div className="text-red-500 mb-4">{error}</div>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="email" className="block">Email</label>
+          <label htmlFor="email" className="block">
+            Email
+          </label>
           <input
             type="email"
             id="email"
@@ -53,7 +63,9 @@ const LoginPage = () => {
         </div>
 
         <div>
-          <label htmlFor="password" className="block">Password</label>
+          <label htmlFor="password" className="block">
+            Password
+          </label>
           <input
             type="password"
             id="password"
@@ -75,7 +87,9 @@ const LoginPage = () => {
 
       <div className="mt-4 text-center">
         <span>Don't have an account? </span>
-        <Link to="/signup" className="text-blue-600 hover:underline">Signup</Link>
+        <Link to="/signup" className="text-blue-600 hover:underline">
+          Signup
+        </Link>
       </div>
     </div>
   );
