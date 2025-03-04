@@ -24,7 +24,7 @@ const SignupPage = () => {
     try {
       await axios.post(`${BASE_URL}/users/signup`, formData);
       setSuccessMessage("Registration successful! Redirecting to login...");
-      setTimeout(() => navigate("/login"), 2000);
+      setTimeout(() => navigate("/login"), 5000);
     } catch (error) {
       setError("Registration failed. Please try again.");
     }
